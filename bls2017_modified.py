@@ -48,7 +48,7 @@ def read_png(filename):
   return image
 
 # Ideally would combine into one function with above, but had issues
-# getting this work with the dataset.map(lambda x: do something(x))
+# getting this work with the dataset.map(lambda x: read_png(filename, label, condition))
 def read_png_conditional(filename, label):
   """Loads a PNG image file."""
   string = tf.read_file(filename)
@@ -244,7 +244,7 @@ def train(args):
   print('conditional', args.conditional)
   print('num_classes', args.num_classes)
 
-  # Was having trouble using a lambda function accpeting arguments for patchsize and conditional bool
+  # WHaving trouble using a lambda function accpeting arguments for patchsize and conditional bool
   # TODO: See if there's a cleaner way to implement this
   def crop(image):
       return tf.random_crop(image, (args.patchsize, args.patchsize, 3))
@@ -272,7 +272,7 @@ def train(args):
 
       train_dataset = tf.data.Dataset.from_tensor_slices((train_files, labels))
       train_dataset = train_dataset.shuffle(buffer_size=len(train_files)).repeat()
-      # TODO: combine functions for conditional and unconditional if possible 
+      # TODO: combine functions for conditional and unconditional if possible
       train_dataset = train_dataset.map(
             read_png_conditional, num_parallel_calls=args.preprocess_threads)
       train_dataset = train_dataset.map(
